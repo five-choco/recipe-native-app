@@ -21,6 +21,7 @@ export interface GeneratedRecipe {
   name: string;
   ingredients: string;
   instructions: string;
+  tips: string;
 }
 
 /**
@@ -33,7 +34,7 @@ export async function generateRecipeFromText(
 ): Promise<GeneratedRecipe> {
   // プロンプトに「JSONで返して」という指示を強めに含める
   const prompt = `以下のテキストからレシピを抽出し、必ず以下のJSON形式で回答してください。
-  {"name": "料理名", "ingredients": "材料", "instructions": "手順"}
+  {"name": "料理名", "ingredients": "材料", "instructions": "手順", "tips": "TIPS"}
   
   テキスト: ${inputText}`;
 

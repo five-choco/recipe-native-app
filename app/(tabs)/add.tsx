@@ -1,6 +1,15 @@
-import { useState } from "react";
-import { Button, Text, TextInput, View, StyleSheet, ActivityIndicator, Alert, ScrollView } from "react-native";
 import * as Clipboard from "expo-clipboard";
+import { useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { saveRecipe } from "../database"; // saveRecipe関数をインポート
 import { GeneratedRecipe, generateRecipeFromText } from "../services/gemini"; // Gemini APIヘルパーをインポート
 
@@ -8,6 +17,7 @@ export default function AddScreen() {
   const [recipeName, setRecipeName] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [tips, setTips] = useState("");
   const [geminiPrompt, setGeminiPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,12 +28,13 @@ export default function AddScreen() {
     }
 
     try {
-      await saveRecipe(recipeName, ingredients, instructions);
+      await saveRecipe(recipeName, ingredients, instructions, tips);
       Alert.alert("成功", "レシピが保存されました！");
       // フォームをクリア
       setRecipeName("");
       setIngredients("");
       setInstructions("");
+      setTips("");
     } catch (error) {
       console.error("レシピ保存エラー:", error);
       Alert.alert(
@@ -47,11 +58,13 @@ export default function AddScreen() {
       if (
         generatedRecipe.name ||
         generatedRecipe.ingredients ||
-        generatedRecipe.instructions
+        generatedRecipe.instructions ||
+        generatedRecipe.tips
       ) {
         setRecipeName(generatedRecipe.name);
         setIngredients(generatedRecipe.ingredients);
         setInstructions(generatedRecipe.instructions);
+        setTips(generatedRecipe.tips);
         Alert.alert("成功", "Geminiからレシピが生成されました！");
       } else {
         Alert.alert(
@@ -147,6 +160,14 @@ export default function AddScreen() {
           placeholder="手順"
           value={instructions}
           onChangeText={setInstructions}
+          multiline
+          numberOfLines={6}
+        />
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="TIPS"
+          value={tips}
+          onChangeText={setTips}
           multiline
           numberOfLines={6}
         />
