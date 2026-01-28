@@ -124,7 +124,7 @@ export default function AddScreen() {
             onPress={handlePasteFromClipboard}
           />
           <Button
-            title={isLoading ? "生成中..." : "AIからレシピを生成"}
+            title={isLoading ? "生成中..." : "AIでレシピを生成"}
             onPress={handleGenerateFromGemini}
             disabled={isLoading}
           />
